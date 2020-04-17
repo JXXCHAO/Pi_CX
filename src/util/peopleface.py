@@ -1,7 +1,7 @@
 import cv2
 
 cap = cv2.VideoCapture(0) # 使用第5个摄像头（我的电脑插了5个摄像头）
-face_cascade = cv2.CascadeClassifier(r'D:\CODING\CV\venv\Lib\site-packages\cv2\data\haarcascade_frontalface_default.xml')  # 加载人脸特征库
+face_cascade = cv2.CascadeClassifier(r'/Library/Python/3.7/site-packages/cv2/data/haarcascade_frontalface_default.xml')  # 加载人脸特征库
 
 while(True):
     ret, frame = cap.read() # 读取一帧的图像
