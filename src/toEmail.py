@@ -21,37 +21,37 @@ class toEmail:
         self.user = userlist
         print('init')
 
-    def addimgfile(self, src, imgid):  # 添加图片函数，参数1:图片路径，参数2:图片ID
+    def addimgfile(self, src, imgid):               # 添加图片函数，参数1:图片路径，参数2:图片ID
         print("准备打开文件 %s" % src)
-        fp = open(src, 'rb')  # 打开文件
+        fp = open(src, 'rb')                        # 打开文件
         print(fp)
         print("打开完毕")
-        msgImage = MIMEImage(fp.read())  # 创建MIMEImage对象，读取图片内容并作为参数
+        msgImage = MIMEImage(fp.read())             # 创建MIMEImage对象，读取图片内容并作为参数
         fp.close()  # 关闭文件
         print("关闭完毕")
-        msgImage.add_header('Content-ID', imgid)  # 指定图片文件的Content-ID,<img>标签src用到
+        msgImage.add_header('Content-ID', imgid)    # 指定图片文件的Content-ID,<img>标签src用到
         print("转换完毕")
         return msgImage  # 返回msgImage对象
 
     def sendEmail(self, path):
         print('send')
         try:
-            msg = MIMEMultipart('related')  # 创建MIMEMultipart对象，采用related定义内嵌资源的邮件体
+            msg = MIMEMultipart('related')          # 创建MIMEMultipart对象，采用related定义内嵌资源的邮件体
 
             count = 1
             for file in os.listdir(path):
                 if os.path.isdir(file):
                     continue
                 else:
-                    filename = os.path.join(path, file)   # 文件绝对路径
+                    filename = os.path.join(path, file)                     # 文件绝对路径
                     print(filename)
-                    tmp = toEmail.addimgfile(self, filename, str(count))  # 添加图片
+                    tmp = toEmail.addimgfile(self, filename, str(count))    # 添加图片
                     msg.attach(tmp)
                     print("读取完毕")
                     count += 1
 
             strtmp = ''
-            for i in range(1, count):
+            for i in range(1, count):                                       # 拼接 邮件html 显示
                 strtmp += """<tr bgcolor="#EFEBDE" height="100" style="font-size:13px">
                              <td><img src="cid:%d"></td><td>
                              </tr>""" % i
@@ -70,7 +70,7 @@ class toEmail:
             # msg['To'] = formataddr(["FK", "监控管理员"])  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
             msg['Subject'] = "邮件测试"  # 邮件的主题，也可以说是标题
 
-            server = smtplib.SMTP_SSL("smtp.qq.com", 465)  # 发件人邮箱中的SMTP服务器，端口是25
+            server = smtplib.SMTP_SSL("smtp.qq.com", 465)  # 发件人邮箱中的SMTP服务器
             server.login(self.sender, self.sender_pass)  # 括号中对应的是发件人邮箱账号、邮箱密码
             server.sendmail(self.sender, self.user, msg.as_string())  # 括号中对应的是发件人邮箱账号、收件人邮箱账号、发送邮件
             server.quit()  # 关闭连接
